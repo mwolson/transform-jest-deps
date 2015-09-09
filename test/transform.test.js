@@ -110,10 +110,42 @@ describe('transform-jest-deps module', function() {
 
   describe('with ES6 features', function() {
     it('replaces deps', function() {
-      src = "var arr1 = ['val1'];\nvar arr2 = [...arr1, 'val2'];\nvar fs = require('fs');";
-      expected = "var arr1 = ['val1'];\nvar arr2 = [...arr1, 'val2'];\nvar fs = require('fsx');";
+      src = [
+        "var arr1 = ['val1'];",
+        "var arr2 = [...arr1, 'val2'];",
+        "var fs = require('fs');"
+      ].join("\n");
+      expected = [
+        "var arr1 = ['val1'];",
+        "var arr2 = [...arr1, 'val2'];",
+        "var fs = require('fsx');"
+      ].join("\n");
       var options = { ecmaVersion: 6 };
 
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+  });
+
+  describe('with jest.dontMock statements', function() {
+    it('replaces in simple statement', function() {
+      src = "jest.dontMock('fs');";
+      expected = "jest.dontMock('fsx');";
+      var options = {};
+
+      falafel.debug = true;
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+
+    xit('replaces in compound statement', function() {
+      src = "jest.dontMock('fs').dontMock('path');";
+      expected = "jest.dontMock('fsx').dontMock('./path');";
+      var options = {};
+
+      falafel.debug = true;
       var res = transform(src, options,  replaceDep);
       verifyFalafel(options);
       expect(res).to.eq(expected);
