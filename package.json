@@ -24,7 +24,8 @@
   "homepage": "https://github.com/Ticketmaster/transform-jest-deps",
   "dependencies": {
     "falafel": "^1.2.0",
-    "lodash.assign": "^3.2.0"
+    "lodash.assign": "^3.2.0",
+    "lodash.clone": "^3.0.3"
   },
   "devDependencies": {
     "chai": "^3.2.0",

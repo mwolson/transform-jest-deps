@@ -1,14 +1,34 @@
+var assign = require('lodash.assign');
+var clone = require('lodash.clone');
 var expect = require('./lib/expect');
-var transform = require('../lib/transform');
+var rewire = require('rewire');
+var sinon = require('sinon');
 
 describe('transform-jest-deps module', function() {
-  var expected, mappings, src;
+  var expected, falafel, mappings, src, transform;
 
   function replaceDep(dep) {
     return mappings[dep];
   }
 
+  function verifyFalafel(options) {
+    options = options ? clone(options) : {};
+    assign(options, { ranges: true });
+    if (options.hasOwnProperty('ignoreTryCatch')) {
+      delete options.ignoreTryCatch;
+    }
+
+    expect(falafel).to.be.calledOnce;
+    expect(falafel.args[0][0]).to.eq(src);
+    expect(falafel.args[0][1]).to.eql(options);
+    expect(falafel.args[0][2]).to.be.a('function');
+  }
+
   beforeEach(function() {
+    transform = rewire('../lib/transform');
+    falafel = sinon.spy(transform.__get__('falafel'));
+    transform.__set__('falafel', falafel);
+
     mappings = {
       fs: 'fsx',
       path: './path',
@@ -35,11 +55,14 @@ describe('transform-jest-deps module', function() {
   describe('with valid mappings', function() {
     it('replaces deps', function() {
       var res = transform(src, replaceDep);
+      verifyFalafel();
       expect(res).to.eq(expected);
     });
 
     it('works with newer API', function() {
-      var res = transform(src, { requireTransform: replaceDep });
+      var options = {};
+      var res = transform(src, options, replaceDep);
+      verifyFalafel(options);
       expect(res).to.eq(expected);
     });
   });
@@ -61,11 +84,26 @@ describe('transform-jest-deps module', function() {
     });
   });
 
-  describe('in try/catch block with ignore_trycatch option enabled', function() {
-    it('replaces outside of the try/catch', function() {
+  describe('in try/catch block', function() {
+    beforeEach(function() {
       src = "try { require('a') } catch (e) { require('b'); } require('c');";
+    });
+
+    it('with ignore_trycatch option disabled, replaces all', function() {
+      expected = "try { require('x') } catch (e) { require('x'); } require('x');";
+      var options = {};
+
+      var res = transform(src, options, function() { return 'x'; });
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+
+    it('with ignore_trycatch option enabled, replaces outside of the try/catch', function() {
       expected = "try { require('a') } catch (e) { require('b'); } require('x');";
-      var res = transform(src, function() { return 'x'; }, true);
+      var options = { ignoreTryCatch: true };
+
+      var res = transform(src, options, function() { return 'x'; });
+      verifyFalafel(options);
       expect(res).to.eq(expected);
     });
   });
@@ -74,10 +112,10 @@ describe('transform-jest-deps module', function() {
     it('replaces deps', function() {
       src = "var arr1 = ['val1'];\nvar arr2 = [...arr1, 'val2'];\nvar fs = require('fs');";
       expected = "var arr1 = ['val1'];\nvar arr2 = [...arr1, 'val2'];\nvar fs = require('fsx');";
-      var res = transform(src, {
-        ecmaVersion: 6,
-        requireTransform: replaceDep
-      });
+      var options = { ecmaVersion: 6 };
+
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
       expect(res).to.eq(expected);
     });
   });
