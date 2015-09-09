@@ -59,4 +59,4 @@ src = transform(src, {
 
 ## License
 
-mit
+MIT
