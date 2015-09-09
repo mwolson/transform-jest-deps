@@ -1,14 +1,14 @@
 {
-  "name": "@ticketmaster/transform-deps",
+  "name": "transform-jest-deps",
   "version": "1.1.0",
-  "description": "parses the ast and transforms require() calls",
+  "description": "Parse the AST, transforming paths in require() calls and other jest-specific calls",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Ticketmaster/node-transform-deps.git"
+    "url": "git://github.com/Ticketmaster/transform-jest-deps.git"
   },
   "keywords": [
     "parse",
@@ -16,12 +16,12 @@
     "require",
     "dependencies"
   ],
-  "author": "Onur Gunduz <ogunduz@gmail.com> (http://onurgunduz.com/)",
+  "author": "Ticketmaster",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tetsuo/transform-deps/issues"
+    "url": "https://github.com/Ticketmaster/transform-jest-deps/issues"
   },
-  "homepage": "https://github.com/tetsuo/transform-deps",
+  "homepage": "https://github.com/Ticketmaster/transform-jest-deps",
   "dependencies": {
     "falafel": "^1.2.0",
     "lodash.assign": "^3.2.0"
