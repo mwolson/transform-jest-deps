@@ -20,7 +20,7 @@ npm install --save-dev transform-jest-deps
 ## Examples
 
 ```js
-var transform = require('transform-deps');
+var transform = require('transform-jest-deps');
 var src = "require('x'); require('y');"
 src = transform(src, function(name) {
   if (name == 'x') return 'z';
@@ -39,7 +39,7 @@ second argument.  if this is done, pass the transform function as the 3rd argume
 
 ```js
 var acorn = require('acorn-jsx');
-var transform = require('transform-deps');
+var transform = require('transform-jest-deps');
 var src = [
   "require('x');",
   "function Thing() {}",
