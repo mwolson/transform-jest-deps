@@ -1,5 +1,4 @@
-var assign = require('lodash.assign');
-var clone = require('lodash.clone');
+var _ = require('lodash');
 var expect = require('./lib/expect');
 var rewire = require('rewire');
 var sinon = require('sinon');
@@ -12,8 +11,8 @@ describe('transform-jest-deps module', function() {
   }
 
   function verifyFalafel(options) {
-    options = options ? clone(options) : {};
-    assign(options, { ranges: true });
+    options = options ? _.clone(options) : {};
+    _.assign(options, { ranges: true });
     if (options.hasOwnProperty('ignoreTryCatch')) {
       delete options.ignoreTryCatch;
     }
@@ -128,24 +127,52 @@ describe('transform-jest-deps module', function() {
     });
   });
 
-  describe('with jest.dontMock statements', function() {
+  describe('with jest statements that take a module', function() {
     it('replaces in simple statement', function() {
       src = "jest.dontMock('fs');";
       expected = "jest.dontMock('fsx');";
       var options = {};
 
-      falafel.debug = true;
       var res = transform(src, options,  replaceDep);
       verifyFalafel(options);
       expect(res).to.eq(expected);
     });
 
-    xit('replaces in compound statement', function() {
-      src = "jest.dontMock('fs').dontMock('path');";
-      expected = "jest.dontMock('fsx').dontMock('./path');";
+    it('replaces in compound statement', function() {
+      src = "jest.dontMock('fs').dontMock('path').mock(\"util\");";
+      expected = "jest.dontMock('fsx').dontMock('./path').mock(\"zxcqlw\");";
       var options = {};
 
-      falafel.debug = true;
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in genMockFromModule', function() {
+      src = "jest.dontMock('fs').genMockFromModule('path');";
+      expected = "jest.dontMock('fsx').genMockFromModule('./path');";
+      var options = {};
+
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in setMock', function() {
+      src = "jest.dontMock('fs').setMock('path', {});";
+      expected = "jest.dontMock('fsx').setMock('./path', {});";
+      var options = {};
+
+      var res = transform(src, options,  replaceDep);
+      verifyFalafel(options);
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in require.requireActual', function() {
+      src = "require.requireActual('fs');";
+      expected = "require.requireActual('fsx');";
+      var options = {};
+
       var res = transform(src, options,  replaceDep);
       verifyFalafel(options);
       expect(res).to.eq(expected);
