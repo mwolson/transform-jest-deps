@@ -2,9 +2,9 @@
   "name": "transform-jest-deps",
   "version": "0.0.1",
   "description": "Parse the AST, transforming paths in require() calls and other jest-specific calls",
-  "main": "index.js",
+  "main": "lib/transform.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "mocha --reporter tap test"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,11 @@
     "falafel": "^1.2.0",
     "lodash.assign": "^3.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.3.0",
+    "rewire": "^2.3.4",
+    "sinon": "^1.16.1",
+    "sinon-chai": "^2.8.0"
+  }
 }
