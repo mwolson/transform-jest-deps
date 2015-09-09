@@ -17,7 +17,7 @@ npm install --save-dev transform-jest-deps
 - Supports ES6 and JSX acorn plugins out-of-the-box.
 - Other plugins can be enabled using [falafel options](https://github.com/substack/node-falafel#custom-parser).
 
-## Examples
+## Example
 
 ```js
 var transform = require('transform-jest-deps');
@@ -34,8 +34,22 @@ outputs:
 require('z'); require('y')
 ```
 
-[Options can be passed to falafel](https://github.com/substack/node-falafel#custom-parser) by using an object as the
-second argument.  if this is done, pass the transform function as the 3rd argument.
+## Options
+
+In addition to the [options supported by falafel](https://github.com/substack/node-falafel#custom-parser), we support:
+
+- `ignoreTryCatch`: Ignore require statements in try/catch blocks
+
+Options may be passed by using an object as the second argument.  If this is done, pass the transform function as the
+3rd argument.
+
+## API
+
+### src = transformJestDeps(src, tranformFunction);
+
+### src = transformJestDeps(src, options, tranformFunction);
+
+Example using options to parse ES6 and JSX:
 
 ```js
 var acorn = require('acorn-jsx');
