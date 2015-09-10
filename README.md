@@ -45,9 +45,9 @@ Options may be passed by using an object as the second argument.  If this is don
 
 ## API
 
-### src = transformJestDeps(src, tranformFunction);
+### src = transformJestDeps(src, transformFn);
 
-### src = transformJestDeps(src, options, tranformFunction);
+### src = transformJestDeps(src, options, transformFn);
 
 Example using options to parse ES6 and JSX:
 
