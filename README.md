@@ -28,7 +28,7 @@ src = transform(src, function(name) {
 console.log(src);
 ```
 
-outputs:
+Output:
 
 ```
 require('z'); require('y')
