@@ -177,6 +177,15 @@ describe('transform-jest-deps module', function() {
       expect(res).to.eq(expected);
     });
 
+    it('replaces in unmock', function() {
+      src = "jest.unmock('fs'); jest.unmock('path', {});";
+      expected = "jest.unmock('fsx'); jest.unmock('./path', {});";
+
+      var res = transform(src,  replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
     it('replaces in require.requireActual', function() {
       src = "require.requireActual('fs');";
       expected = "require.requireActual('fsx');";
