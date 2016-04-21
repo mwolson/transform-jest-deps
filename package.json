@@ -4,7 +4,8 @@
   "description": "Parse the AST, transforming paths in require() calls and other jest-specific calls",
   "main": "lib/transform.js",
   "scripts": {
-    "test": "mocha --reporter tap test"
+    "test": "mocha --reporter tap test",
+    "version": "npm run test"
   },
   "repository": {
     "type": "git",
