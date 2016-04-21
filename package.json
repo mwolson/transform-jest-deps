@@ -1,6 +1,6 @@
 {
   "name": "transform-jest-deps",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Parse the AST, transforming paths in require() calls and other jest-specific calls",
   "main": "lib/transform.js",
   "scripts": {
