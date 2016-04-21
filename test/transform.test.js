@@ -134,18 +134,18 @@ describe('transform-jest-deps module', function() {
         "var fs = require('fsx');"
       ].join("\n");
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
   });
 
-  describe('with jest statements that take a module', function() {
+  describe('with jest statements', function() {
     it('replaces in simple statement', function() {
       src = "jest.dontMock('fs');";
       expected = "jest.dontMock('fsx');";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
@@ -154,43 +154,99 @@ describe('transform-jest-deps module', function() {
       src = "jest.dontMock('fs').dontMock('path').mock(\"util\");";
       expected = "jest.dontMock('fsx').dontMock('./path').mock(\"zxcqlw\");";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
 
-    it('replaces in genMockFromModule', function() {
-      src = "jest.dontMock('fs').genMockFromModule('path');";
-      expected = "jest.dontMock('fsx').genMockFromModule('./path');";
+    it('replaces in jest.dontMock', function() {
+      src = "jest.dontMock('fs');";
+      expected = "jest.dontMock('fsx');";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
 
-    it('replaces in setMock', function() {
-      src = "jest.dontMock('fs').setMock('path', {});";
-      expected = "jest.dontMock('fsx').setMock('./path', {});";
+    it('replaces in jest.genMockFromModule', function() {
+      src = "jest.genMockFromModule('path');";
+      expected = "jest.genMockFromModule('./path');";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
 
-    it('replaces in unmock', function() {
-      src = "jest.unmock('fs'); jest.unmock('path', {});";
-      expected = "jest.unmock('fsx'); jest.unmock('./path', {});";
+    it('replaces in jest.mock', function() {
+      src = "jest.mock('fs'); jest.mock('path', () => true);";
+      expected = "jest.mock('fsx'); jest.mock('./path', () => true);";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
 
+    it('replaces in jest.setMock', function() {
+      src = "jest.setMock('path', {});";
+      expected = "jest.setMock('./path', {});";
+
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in jest.unmock', function() {
+      src = "jest.unmock('fs');";
+      expected = "jest.unmock('fsx');";
+
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
+    it('does not replace in jest.foo', function() {
+      src = "require.foo('fs');";
+      expected = src;
+
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+  });
+
+  describe('with require statements', function() {
     it('replaces in require.requireActual', function() {
       src = "require.requireActual('fs');";
       expected = "require.requireActual('fsx');";
 
-      var res = transform(src,  replaceDep);
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in require.requireMock', function() {
+      src = "require.requireMock('fs');";
+      expected = "require.requireMock('fsx');";
+
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
+    it('replaces in require.resolve', function() {
+      src = "require.resolve('fs');";
+      expected = "require.resolve('fsx');";
+
+      var res = transform(src, replaceDep);
+      verifyFalafel();
+      expect(res).to.eq(expected);
+    });
+
+    it('does not replace in require.foo', function() {
+      src = "require.foo('fs');";
+      expected = src;
+
+      var res = transform(src, replaceDep);
       verifyFalafel();
       expect(res).to.eq(expected);
     });
