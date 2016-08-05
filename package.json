@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Ticketmaster/transform-jest-deps.git"
+    "url": "git://github.com/mwolson/transform-jest-deps.git"
   },
   "keywords": [
     "parse",
@@ -17,12 +17,12 @@
     "require",
     "dependencies"
   ],
-  "author": "Ticketmaster",
+  "author": "Michael Olson <mwolson@member.fsf.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ticketmaster/transform-jest-deps/issues"
+    "url": "https://github.com/mwolson/transform-jest-deps/issues"
   },
-  "homepage": "https://github.com/Ticketmaster/transform-jest-deps",
+  "homepage": "https://github.com/mwolson/transform-jest-deps",
   "dependencies": {
     "acorn-jsx": "^2.0.0",
     "falafel": "^1.2.0",
